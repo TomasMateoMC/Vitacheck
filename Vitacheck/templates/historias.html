@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Historias Clínicas{% endblock %}
+
+{% block content %}
+
+<h4>Historias Clínicas de {{ paciente.nombre }}</h4>
+
+<a href="{{ url_for('historia_nueva', patient_id=paciente.id) }}" class="btn btn-primary my-3">
+  Nueva Historia
+</a>
+
+<div class="list-group">
+  {% for h in historias %}
+  <div class="list-group-item">
+    <strong>{{ h.tipo or 'Sin tipo' }}</strong><br>
+    <small>Médico: {{ h.medico_nombre or 'N/A' }}</small><br>
+    <small>{{ h.fecha }}</small>
+    <p class="mt-2">{{ h.nota }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% if historias|length == 0 %}
+<div class="alert alert-info mt-3">No hay historias registradas.</div>
+{% endif %}
+
+{% endblock %}

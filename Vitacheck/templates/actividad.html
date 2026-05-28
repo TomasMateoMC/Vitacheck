@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 animate__animated animate__fadeIn">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="fw-bold tracking-tight" style="color: var(--dark-bg);">Prescripción de Actividad Física</h1>
+            <p class="text-muted">Generación automatizada de rutinas y entrenamiento según el último estado antropométrico.</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+            <form method="POST" action="{{ url_for('actividad') }}" id="form-actividad">
+                <label for="paciente_id" class="form-label fw-bold text-dark mb-2">
+                    <i class="bi bi-person-search me-2 text-primary"></i>Seleccionar Paciente para Diagnóstico
+                </label>
+                <select name="paciente_id" id="paciente_id" class="form-select form-select-lg" onchange="this.form.submit()" required style="border-radius: 10px;">
+                    <option value="">Seleccione un paciente de la lista...</option>
+                    {% for p in pacientes %}
+                        <option value="{{ p.id }}" {% if paciente_seleccionado and paciente_seleccionado.id == p.id %}selected{% endif %}>
+                            {{ p.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+
+    {% if paciente_seleccionado %}
+        {% if ultimo_imc %}
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100 text-center p-4" style="background-color: #ffffff;">
+                        <span class="text-muted small d-block mb-1">PACIENTE EVALUADO</span>
+                        <h4 class="fw-bold text-dark mb-4">{{ paciente_seleccionado.nombre }}</h4>
+                        
+                        <div class="p-3 bg-light rounded-3 mb-3">
+                            <span class="text-muted small d-block mb-1">ÚLTIMO IMC REGISTRADO</span>
+                            <h2 class="display-5 fw-extrabold text-primary mb-0">{{ ultimo_imc.imc }}</h2>
+                        </div>
+
+                        {% if 'Normal' in ultimo_imc.clasificacion %}
+                            <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill fs-6 w-100">{{ ultimo_imc.clasificacion }}</span>
+                        {% elif 'Bajo' in ultimo_imc.clasificacion %}
+                            <span class="badge bg-info-subtle text-info border border-info px-3 py-2 rounded-pill fs-6 w-100">{{ ultimo_imc.clasificacion }}</span>
+                        {% elif 'Sobrepeso' in ultimo_imc.clasificacion %}
+                            <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 rounded-pill fs-6 w-100">{{ ultimo_imc.clasificacion }}</span>
+                        {% else %}
+                            <span class="badge bg-danger-subtle text-danger border border-danger px-3 py-2 rounded-pill fs-6 w-100">{{ ultimo_imc.clasificacion }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card border-0 shadow-lg h-100" style="border-radius: 16px; overflow: hidden;">
+                        <div class="p-4 text-white" style="background: linear-gradient(135deg, #111827, #1f2937);">
+                            <h5 class="fw-bold mb-0"><i class="bi bi-lightning-charge-fill me-2 text-warning"></i>Plan de Entrenamiento Fisiológico</h5>
+                        </div>
+                        
+                        <div class="card-body p-4 bg-white">
+                            {% if 'Bajo peso' in ultimo_imc.clasificacion %}
+                                <div class="p-3 mb-3 rounded-3" style="background-color: #f0fdf4; border-left: 4px solid #16a34a;">
+                                    <h6 class="fw-bold text-success mb-1">Enfoque: Hipertrofia y Acondicionamiento Anabólico</h6>
+                                    <p class="text-muted small mb-0">Se sugiere limitar el cardio extremo para evitar mayor déficit calórico.</p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> Entrenamiento de fuerza con cargas moderadas (3 días a la semana).</li>
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> Sesiones breves de flexibilidad y movilidad articular (15 minutos al día).</li>
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> Caminata ligera o elongación aeróbica de baja intensidad.</li>
+                                </ul>
+
+                            {% elif 'Normal' in ultimo_imc.clasificacion %}
+                                <div class="p-3 mb-3 rounded-3" style="background-color: #f0fdf4; border-left: 4px solid #16a34a;">
+                                    <h6 class="fw-bold text-success mb-1">Enfoque: Mantenimiento y Capacidad Cardiovascular Optima</h6>
+                                    <p class="text-muted small mb-0">El paciente se encuentra en un rango fisiológico excelente para cualquier disciplina deportiva.</p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> Cardio de moderada a alta intensidad (Running, Ciclismo, Natación) 150 min/semana.</li>
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> Entrenamiento de resistencia muscular funcional (Gimnasio o Calistenia 3 a 4 días).</li>
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> Deportes recreativos de alta demanda metabólica.</li>
+                                </ul>
+
+                            {% elif 'Sobrepeso' in ultimo_imc.clasificacion %}
+                                <div class="p-3 mb-3 rounded-3" style="background-color: #fffbeb; border-left: 4px solid #d97706;">
+                                    <h6 class="fw-bold text-warning mb-1">Enfoque: Déficit Calórico y Protección Articular Media</h6>
+                                    <p class="text-muted small mb-0">Priorizar entrenamientos que optimicen la oxidación de grasas sin sobrecargar rodillas.</p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-warning me-3 fs-5"></i> Cardio HIIT o caminata a paso ligero con inclinación (40-60 minutos diarios).</li>
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-warning me-3 fs-5"></i> Circuitos de fuerza general con poco descanso para mantener las pulsaciones elevadas.</li>
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-warning me-3 fs-5"></i> Ejercicios en elíptica o natación para amortiguar el impacto óseo.</li>
+                                </ul>
+
+                            {% else %}
+                                <div class="p-3 mb-3 rounded-3" style="background-color: #fef2f2; border-left: 4px solid #dc2626;">
+                                    <h6 class="fw-bold text-danger mb-1">Enfoque: Adaptación Metabólica Prudente y Cero Impacto</h6>
+                                    <p class="text-muted small mb-0">Urgente control adaptativo. Queda prohibido correr o saltar inicialmente para proteger la columna y articulaciones.</p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-danger me-3 fs-5"></i> Caminatas en terreno plano a velocidad constante controlada (30 minutos, 5 días).</li>
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-danger me-3 fs-5"></i> Hidrogimnasia o natación asistida (ideal para remover carga gravitacional).</li>
+                                    <li class="list-group-item d-flex align-items-center py-3"><i class="bi bi-check-circle-fill text-danger me-3 fs-5"></i> Ejercicios de fuerza sentados o con bandas elásticas de baja resistencia.</li>
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-warning border-0 shadow-sm p-4 mt-3" role="alert" style="border-radius: 12px;">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill fs-3 me-3"></i>
+                    <div>
+                        <h5 class="alert-heading fw-bold mb-1">Falta Historial de IMC</h5>
+                        <p class="mb-0">El paciente <strong>{{ paciente_seleccionado.nombre }}</strong> está registrado, pero aún no cuenta con ningún cálculo antropométrico guardado en la base de datos. Por favor, realiza un primer cálculo en el módulo correspondiente.</p>
+                        <a href="{{ url_for('imc') }}" class="btn btn-warning btn-sm text-white mt-3 fw-bold">Ir a Calculadora IMC</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

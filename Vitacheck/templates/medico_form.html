@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar Médico' if medico else 'Nuevo Médico' }}{% endblock %}
+
+{% block content %}
+<div class="col-md-7 mx-auto">
+  <div class="card">
+    <div class="card-body">
+
+      <h3 class="fw-bold mb-3">{{ 'Editar Médico' if medico else 'Nuevo Médico' }}</h3>
+
+      <form method="POST">
+
+        <div class="mb-3">
+          <label class="form-label">Nombre</label>
+          <input class="form-control" name="nombre" required
+                 value="{{ medico.nombre if medico else '' }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Número de licencia</label>
+          <input class="form-control" name="numero_licencia"
+                 value="{{ medico.numero_licencia if medico else '' }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Especialidad</label>
+          <select name="specialty_id" class="form-select" required>
+            <option value="">Seleccione...</option>
+            {% for esp in especialidades %}
+            <option value="{{ esp.id }}"
+              {% if medico and medico.specialty_id == esp.id %}selected{% endif %}>
+              {{ esp.nombre }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Teléfono</label>
+          <input class="form-control" name="telefono"
+                 value="{{ medico.telefono if medico else '' }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" name="email"
+                 value="{{ medico.email if medico else '' }}">
+        </div>
+
+        <button class="btn btn-primary">Guardar</button>
+        <a href="{{ url_for('medicos') }}" class="btn btn-secondary">Volver</a>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

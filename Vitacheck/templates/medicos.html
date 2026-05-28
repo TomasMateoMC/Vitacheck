@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Listado de Médicos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="fw-bold">Médicos</h2>
+  <a href="{{ url_for('medico_nuevo') }}" class="btn btn-primary">Nuevo Médico</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Especialidad</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in medicos %}
+        <tr>
+          <td>{{ m.id }}</td>
+          <td>{{ m.nombre }}</td>
+          <td>{{ m.especialidad_nombre }}</td>
+          <td>{{ m.telefono }}</td>
+          <td>{{ m.email }}</td>
+          <td>
+            <a href="{{ url_for('medico_editar', id=m.id) }}" class="btn btn-sm btn-secondary">Editar</a>
+
+            <form method="post" action="{{ url_for('medico_borrar', id=m.id) }}" 
+                  style="display:inline;" 
+                  onsubmit="return confirm('¿Eliminar médico?');">
+              <button class="btn btn-sm btn-danger">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if medicos|length == 0 %}
+      <p class="text-center text-muted">No hay médicos registrados.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
