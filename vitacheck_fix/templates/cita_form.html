@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Registrar Cita{% endblock %}
+
+{% block content %}
+<div class="col-md-7 mx-auto">
+  <div class="card">
+    <div class="card-body">
+      <h3 class="fw-bold mb-3">Nueva Cita</h3>
+
+      <form method="POST">
+
+        <div class="mb-3">
+          <label class="form-label">Paciente</label>
+          <select name="paciente_id" class="form-select" required>
+            <option value="">Seleccione...</option>
+            {% for p in pacientes %}
+              <option value="{{ p.id }}">
+                {{ p.nombre }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Médico</label>
+          <select name="medico_id" class="form-select" required>
+            <option value="">Seleccione...</option>
+            {% for m in medicos %}
+              <option value="{{ m.id }}">
+                {{ m.nombre }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Fecha</label>
+          <input type="date" name="fecha" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Hora</label>
+          <input type="time" name="hora" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Motivo</label>
+          <input type="text" name="motivo" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{{ url_for('citas') }}" class="btn btn-secondary">Volver</a>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

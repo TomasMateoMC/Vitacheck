@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Pacientes</h4>
+  <a href="{{ url_for('guardar_paciente') }}" class="btn btn-primary">Nuevo Paciente</a>
+</div>
+
+<div class="list-group">
+  {% for p in pacientes %}
+  <div class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+      <strong>{{ p.nombre }}</strong><br>
+      <small>{{ p.documento or '' }} • {{ p.email or '' }} • {{ p.telefono or '' }}</small>
+    </div>
+    
+    <div>
+      <div class="btn-group">
+          <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('guardar_paciente', id=p.id) }}">Editar</a>
+          
+          <form action="{{ url_for('paciente_borrar', id=p.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Está seguro de eliminar este paciente?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Borrar</button>
+          </form>
+      </div>
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
