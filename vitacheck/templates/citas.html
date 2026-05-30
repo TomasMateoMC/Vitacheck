@@ -4,7 +4,7 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2 class="fw-bold">Citas</h2>
-  <a href="{{ url_for('cita_nueva') }}" class="btn btn-primary">Nueva Cita</a>
+  <a href="{{ url_for('citas.cita_nueva') }}" class="btn btn-primary">Nueva Cita</a>
 </div>
 
 <div class="card">
@@ -35,7 +35,7 @@
 
           <td>
             <!-- Cambiar estado -->
-            <form method="post" action="{{ url_for('cita_cambiar_estado', id=c.id) }}">
+            <form method="post" action="{{ url_for('citas.cita_cambiar_estado', id=c.id) }}">
               <select name="estado" class="form-select form-select-sm" onchange="this.form.submit()">
                 <option value="pendiente" {% if c.estado=='pendiente' %}selected{% endif %}>Pendiente</option>
                 <option value="completada" {% if c.estado=='completada' %}selected{% endif %}>Completada</option>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{% block title %}Citas Médicas{% endblock %}</title>
+  <title>{% block title %}VitaCheck{% endblock %}</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -12,24 +12,49 @@
 
 <body>
 
-  <nav class="navbar navbar-expand-lg bg-white border-bottom">
+  <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="{{ url_for('dashboard') }}">Clínica • Citas</a>
 
-      <ul class="navbar-nav ms-auto d-flex flex-row align-items-center mb-0">
+      <!-- LOGO -->
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('auth.dashboard') }}">
+        <div class="nav-logo-icon">
+          <i class="bi bi-heart-pulse-fill"></i>
+        </div>
+        <span class="nav-logo-text">VitaCheck</span>
+      </a>
+
+      <!-- DERECHA -->
+      <ul class="navbar-nav ms-auto d-flex flex-row align-items-center gap-3 mb-0">
         {% if 'user' in session %}
-          <li class="nav-item me-3">
-            <span class="text-muted">Conectado como: <strong>{{ session['user']['username'] }}</strong></span>
+          <li class="nav-item">
+            <div class="nav-user">
+              <div class="nav-user-avatar">
+                {{ session['user']['nombre_completo'][0] }}
+              </div>
+              <div class="nav-user-info">
+                <span class="nav-user-name">{{ session['user']['nombre_completo'] }}</span>
+                <span class="nav-user-role">
+                  {% if session['user']['role_id'] == 1 %}Administrador{% else %}Médico{% endif %}
+                </span>
+              </div>
+            </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-danger fw-semibold" href="{{ url_for('logout') }}">Salir</a>
+            <a class="nav-logout" href="{{ url_for('auth.logout') }}">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Salir</span>
+            </a>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('login') }}">Ingresar</a>
+            <a class="nav-login-btn" href="{{ url_for('auth.login') }}">
+              <i class="bi bi-person-fill"></i>
+              <span>Ingresar</span>
+            </a>
           </li>
         {% endif %}
       </ul>
+
     </div>
   </nav>
 
@@ -38,9 +63,10 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for cat, msg in messages %}
-          <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">
+          <div class="alert alert-{{ cat }} alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
+            <i class="bi bi-exclamation-circle-fill flex-shrink-0"></i>
             {{ msg }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
           </div>
         {% endfor %}
       {% endif %}
@@ -50,9 +76,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
   {% block extra_js %}{% endblock %}
 
 </body>

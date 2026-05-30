@@ -7,7 +7,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="fw-bold">Historial de IMC</h2>
-        <a href="{{ url_for('imc') }}" class="btn btn-primary">Registrar nuevo IMC</a>
+        <a href="{{ url_for('imc.imc') }}" class="btn btn-primary">Registrar nuevo IMC</a>
     </div>
 
     {% if historial and historial|length > 0 %}
