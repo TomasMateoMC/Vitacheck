@@ -6,7 +6,9 @@ from routes.citas     import citas_bp
 from routes.historias import historias_bp
 from routes.imc       import imc_bp
 from routes.chat      import chat_bp
+from routes.admin     import admin_bp
 import os
+
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET", "mi_clave_secreta_123")
@@ -18,6 +20,7 @@ app.register_blueprint(citas_bp)
 app.register_blueprint(historias_bp)
 app.register_blueprint(imc_bp)
 app.register_blueprint(chat_bp)
+app.register_blueprint(admin_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)

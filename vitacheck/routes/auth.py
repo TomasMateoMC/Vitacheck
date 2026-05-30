@@ -12,27 +12,42 @@ def login():
         password = request.form['password']
 
         conn = get_connection()
-        cur  = conn.cursor(dictionary=True)
-        cur.execute("SELECT * FROM usuarios WHERE username = %s", (username,))
+        cur = conn.cursor(dictionary=True)
+        cur.execute("""
+         SELECT u.*, r.nombre as rol 
+         FROM usuarios u 
+         JOIN roles r ON u.role_id = r.id 
+         WHERE u.username = %s
+         """, (username,))
         user = cur.fetchone()
         cur.close()
         conn.close()
 
+        # 1. Validación de usuario y contraseña
         if not user or not check_password_hash(user['password_hash'], password):
             flash('Usuario o contraseña incorrectos.', 'danger')
             return redirect(url_for('auth.login'))
 
-        if user['estado'] == 'pendiente':
+        # 2. Validación de estado (seguridad)
+        estado = user.get('estado', 'pendiente') 
+        if estado == 'pendiente':
             flash('Tu cuenta está pendiente de aprobación.', 'warning')
             return redirect(url_for('auth.login'))
 
-        if user['estado'] == 'rechazado':
-            flash('Tu cuenta ha sido rechazada. Contacta al administrador.', 'danger')
+        if estado == 'rechazado':
+            flash('Tu cuenta ha sido rechazada.', 'danger')
             return redirect(url_for('auth.login'))
-
-        session['user'] = user
-        return redirect(url_for('auth.dashboard'))
-
+        
+        # 3. Guardar la sesión y redireccionar según el ROL
+        # Esto solo se ejecuta si el usuario es válido y está aprobado
+        session['user'] = user 
+        
+        if user['rol'] == 'admin':
+            return redirect(url_for('admin.dashboard'))
+        elif user['rol'] == 'medico': # O 'especialista' según tu DB
+            return redirect(url_for('medicos.dashboard'))
+        else:
+            return redirect(url_for('pacientes.dashboard'))
     return render_template('login.html')
 
 
@@ -112,21 +127,3 @@ def gestionar_solicitud(user_id, accion):
           'success' if accion == 'activo' else 'danger')
     return redirect(url_for('auth.solicitudes'))
 
-
-@auth_bp.route("/init_admin")
-def init_admin():
-    conn = get_connection()
-    cur  = conn.cursor(dictionary=True)
-    cur.execute("INSERT IGNORE INTO roles (id, nombre) VALUES (1, 'admin'), (2, 'medico')")
-    conn.commit()
-    cur.execute("SELECT COUNT(*) as c FROM usuarios")
-    if cur.fetchone()["c"] > 0:
-        cur.close(); conn.close()
-        return "El sistema ya cuenta con usuarios."
-    cur.execute("""
-        INSERT INTO usuarios (username, password_hash, nombre_completo, role_id)
-        VALUES (%s, %s, %s, 1)
-    """, ("admin", generate_password_hash("admin123"), "Administrador Sistema"))
-    conn.commit()
-    cur.close(); conn.close()
-    return "Admin creado exitosamente."

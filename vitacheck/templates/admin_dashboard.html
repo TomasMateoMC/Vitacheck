@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Administración{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Panel de Administración</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card bg-warning text-dark shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Solicitudes Pendientes</h5>
+                    <p class="card-text display-6">{{ pendientes|length }}</p>
+                    <a href="{{ url_for('auth.solicitudes') }}" class="btn btn-dark">Gestionar Usuarios</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-info text-white shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Acciones Rápidas</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('medicos.dashboard') }}" class="btn btn-light btn-sm">Gestionar Médicos</a>
+                        <a href="{{ url_for('citas.citas') }}" class="btn btn-light btn-sm">Ver Citas Totales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if pendientes %}
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-danger text-white">Usuarios a Espera</div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr><th>Usuario</th><th>Nombre</th><th>Acciones</th></tr>
+                </thead>
+                <tbody>
+                    {% for u in pendientes %}
+                    <tr>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.nombre_completo }}</td>
+                        <td>
+                            <a href="{{ url_for('auth.gestionar_solicitud', user_id=u.id, accion='activo') }}" class="btn btn-success btn-sm">Aprobar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

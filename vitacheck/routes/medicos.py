@@ -4,9 +4,9 @@ from decorators import login_required
 
 medicos_bp = Blueprint('medicos', __name__)
 
-@medicos_bp.route("/medicos")
+@medicos_bp.route("/dashboard")
 @login_required
-def medicos():
+def dashboard():
     conn = get_connection()
     cur  = conn.cursor(dictionary=True)
     cur.execute("""
@@ -62,7 +62,7 @@ def medico_editar(id):
                   request.form.get("specialty_id"), id))
             conn.commit()
             flash("Médico actualizado.", "success")
-            return redirect(url_for("medicos.medicos"))
+            return redirect(url_for("medicos.dashboard"))
         except Exception:
             conn.rollback()
             flash("Error: la licencia ya pertenece a otro médico.", "danger")

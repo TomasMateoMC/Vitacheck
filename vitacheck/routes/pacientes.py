@@ -4,9 +4,9 @@ from decorators import login_required
 
 pacientes_bp = Blueprint('pacientes', __name__)
 
-@pacientes_bp.route("/pacientes")
+@pacientes_bp.route("/dashboard")
 @login_required
-def pacientes():
+def dashboard():
     conn = get_connection()
     cur  = conn.cursor(dictionary=True)
     cur.execute("SELECT * FROM pacientes ORDER BY nombre ASC")
