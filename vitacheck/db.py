@@ -6,7 +6,7 @@ import os
 DB_CONFIG = {
     "host": os.environ.get("DB_HOST", "localhost"),
     "user": os.environ.get("DB_USER", "root"),
-    "password": os.environ.get("DB_PASSWORD", "152006"),  # CONTRASEÑA REAL
+    "password": os.environ.get("DB_PASSWORD", "12345678910"),  # CONTRASEÑA REAL
     "database": os.environ.get("DB_NAME", "db_parcial"),
     "auth_plugin": "mysql_native_password"
 }
