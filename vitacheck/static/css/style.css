@@ -1,0 +1,138 @@
+/* ==========================================================================
+   HOJA DE ESTILOS MODERNA E INTERACTIVA - SISTEMA NUTRICIONAL
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #4f46e5;       /* Índigo moderno */
+    --primary-hover: #4338ca;
+    --success-color: #10b981;       /* Verde esmeralda */
+    --warning-color: #f59e0b;       /* Ámbar */
+    --danger-color: #ef4444;        /* Coral */
+    --dark-bg: #0f172a;             /* Azul pizarra muy oscuro */
+    --light-bg: #f8fafc;            /* Gris azulado ultra claro */
+    --card-border: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+/* --- BARRA DE NAVEGACIÓN MODERNA --- */
+.navbar {
+    background-color: var(--dark-bg) !important;
+    padding: 0.85rem 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    font-size: 1.25rem;
+}
+
+.navbar-text {
+    color: #94a3b8 !important;
+    font-size: 0.9rem;
+}
+
+/* --- TARJETAS INTERACTIVAS (DASHBOARD) --- */
+.card {
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-smooth);
+    overflow: hidden;
+}
+
+/* Efecto de elevación al pasar el mouse por encima */
+.card-interactive:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(79, 70, 229, 0.12);
+    border-color: rgba(79, 70, 229, 0.3);
+}
+
+.card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--card-border);
+    font-weight: 600;
+}
+
+/* --- BOTONES MODERNOS --- */
+.btn {
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1.25rem;
+    transition: var(--transition-smooth);
+}
+
+.btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
+.btn-primary:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); transform: scale(1.02); }
+
+.btn-success { background-color: var(--success-color); border-color: var(--success-color); }
+.btn-success:hover { background-color: #059669; transform: scale(1.02); }
+
+.btn-warning { background-color: var(--warning-color); border-color: var(--warning-color); color: #fff; }
+.btn-warning:hover { background-color: #d97706; color: #fff; transform: scale(1.02); }
+
+/* --- TABLAS ESTILIZADAS --- */
+.table-responsive {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--card-border);
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 0.9rem;
+    padding: 0.85rem 0.5rem;
+}
+
+/* --- DISEÑO DE BURBUJAS DE CHAT --- */
+#chat-box {
+    background-color: #f1f5f9 !important;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+}
+
+.chat-bubble-me {
+    background: linear-gradient(135deg, var(--primary-color), #6366f1) !important;
+    color: #ffffff !important;
+    border-radius: 18px 18px 0px 18px !important;
+    padding: 0.75rem 1.1rem;
+}
+
+.chat-bubble-other {
+    background: #ffffff !important;
+    color: var(--text-main) !important;
+    border-radius: 18px 18px 18px 0px !important;
+    border: 1px solid var(--card-border) !important;
+    padding: 0.75rem 1.1rem;
+}
+
+/* --- ALERTAS FLASH LINDAS --- */
+.alert {
+    border-radius: var(--radius-md);
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
